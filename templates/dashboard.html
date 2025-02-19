@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h2>Device Status Dashboard</h2>
+    <table border="1">
+        <tr>
+            <th>Device Name</th>
+            <th>Status</th>
+            <th>Last Used DNA</th>
+            <th>Last Access Time</th>
+        </tr>
+        {% for device in devices %}
+        <tr>
+            <td>{{ device[1] }}</td>
+            <td>{{ device[2] }}</td>
+            <td>{{ device[3] }}</td>
+            <td>{{ device[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('logs') }}">View Access Logs</a> |
+    <a href="{{ url_for('settings') }}">Settings</a> |
+    <a href="{{ url_for('analytics') }}">Analytics</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h2>DNA Authentication Login</h2>
+    <form action="{{ url_for('login') }}" method="POST">
+        <label for="dna">Enter DNA:</label>
+        <input type="text" name="dna" required>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>

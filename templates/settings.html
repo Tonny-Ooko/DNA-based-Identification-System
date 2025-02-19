@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+</head>
+<body>
+    <h2>Manage Device Access</h2>
+    <form action="{{ url_for('settings') }}" method="POST">
+        <label for="device_id">Select Device:</label>
+        <select name="device_id">
+            {% for device in devices %}
+            <option value="{{ device[0] }}">{{ device[1] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="action" value="grant">Grant Access</button>
+        <button type="submit" name="action" value="revoke">Revoke Access</button>
+    </form>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

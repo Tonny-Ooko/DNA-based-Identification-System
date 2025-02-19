@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+</head>
+<body>
+    <h2>DNA Usage Analytics</h2>
+    <table border="1">
+        <tr>
+            <th>User ID</th>
+            <th>Total Access Attempts</th>
+            <th>Successful Attempts</th>
+            <th>Failed Attempts</th>
+        </tr>
+        {% for data in analytics %}
+        <tr>
+            <td>{{ data[0] }}</td>
+            <td>{{ data[1] }}</td>
+            <td>{{ data[2] }}</td>
+            <td>{{ data[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

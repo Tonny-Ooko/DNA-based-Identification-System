@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA-Based Identification System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #007BFF; /* Blue background */
+            color: #333;
+        }
+
+        /* Menu bar styling */
+        .menu-bar {
+            background-color: black;
+            padding: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .menu-bar a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            margin: 0 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .menu-bar a:hover {
+            color: #ffcc00; /* Highlight color */
+        }
+
+        /* Image styling */
+        img {
+            width: 100%;
+            display: block;
+            margin: 0;
+            border: none;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: black;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Canvas Styling */
+        #helixCanvasTop, #helixCanvasBottom {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Animating text */
+        .floating-text {
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            font-size: 1.5rem;
+            color: black;
+            animation: fadeInOut 5s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <a href="{{ url_for('search_family') }}">Family Search</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('dashboard') }}">Status Dashboard</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Floating Text (Top) -->
+    <div class="floating-text" style="top: 10%;">
+        <h1>Welcome to the DNA-Based Identification System</h1>
+    </div>
+
+    <!-- Canvas for Helix Animation (Top) -->
+    <canvas id="helixCanvasTop"></canvas>
+
+    <!-- Static Image -->
+    <img src="/static/dna_banner.png" alt="DNA Identification" />
+
+    <!-- Content -->
+    <div class="container">
+        <p>Click the button below to get started or learn more about our system.</p>
+        <a href="{{ url_for('dashboard') }}" class="btn">Get Started</a>
+    </div>
+
+    <!-- Floating Text (Bottom) -->
+    <div class="floating-text" style="bottom: 10%;">
+        <p>
+            Adenine (A) - Red.<br>
+            Thymine (T) - Green.<br>
+            Guanine (G) - Blue.<br>
+            Cytosine (C) - Yellow.<br>
+            Sugar-phosphate backbone - Black.
+        </p>
+    </div>
+
+    <!-- Canvas for Helix Animation (Bottom) -->
+    <canvas id="helixCanvasBottom"></canvas>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2025 Powered by Techonward Ltd
+    </div>
+
+    <script>
+        function setupCanvas(canvas) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight / 2;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = 150;
+            const helixHeight = 500;
+            const baseColors = {
+                A: '#ff0000', // Adenine (red)
+                T: '#00ff00', // Thymine (green)
+                G: '#0000ff', // Guanine (blue)
+                C: '#ffcc00', // Cytosine (yellow)
+                backbone: '#000000', // Sugar-phosphate backbone (black)
+            };
+
+            const bases = [
+                ['A', 'T'], // Pair 1
+                ['G', 'C'], // Pair 2
+                ['T', 'A'], // Pair 3
+                ['C', 'G'], // Pair 4
+            ];
+
+            let angle = 0;
+
+            function drawBasePair(x, y, base1, base2) {
+                ctx.beginPath();
+                ctx.moveTo(x - 20, y);
+                ctx.lineTo(x + 20, y);
+                ctx.strokeStyle = baseColors.backbone;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(x - 20, y, 10, 0, Math.PI * 2);
+                ctx.fillStyle = baseColors[base1];
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(x + 20, y, 10, 0, Math.PI * 2);
+                ctx.fillStyle = baseColors[base2];
+                ctx.fill();
+            }
+
+            function drawHelix(offsetX) {
+                for (let i = 0; i < helixHeight; i += 30) {
+                    const x1 = centerX + offsetX + radius * Math.sin((angle + i) * Math.PI / 180);
+                    const y1 = centerY + i - helixHeight / 2;
+                    const x2 = centerX + offsetX - radius * Math.sin((angle + i) * Math.PI / 180);
+                    const y2 = centerY + i - helixHeight / 2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.strokeStyle = baseColors.backbone;
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+
+                    const pair = bases[(i / 30) % bases.length];
+                    drawBasePair((x1 + x2) / 2, y1, pair[0], pair[1]);
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                drawHelix(-200); // Left helix
+                drawHelix(0); // Center helix
+                drawHelix(200); // Right helix
+                angle += 2;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight / 2;
+            });
+        }
+
+        const topCanvas = document.getElementById('helixCanvasTop');
+        const bottomCanvas = document.getElementById('helixCanvasBottom');
+
+        setupCanvas(topCanvas);
+        setupCanvas(bottomCanvas);
+    </script>
+</body>
+</html>
